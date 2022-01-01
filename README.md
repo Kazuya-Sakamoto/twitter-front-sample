@@ -1,5 +1,10 @@
 # twitter-front-sample
 
+twitter認証を検証
+
+## API
+https://github.com/tsubaoza0901/twitter-api-sample
+
 ## Build Setup
 
 ```bash
@@ -18,3 +23,4 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
