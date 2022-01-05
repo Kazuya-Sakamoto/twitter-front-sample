@@ -34,7 +34,7 @@ jobs:
       name: default
     steps:
       - checkout
-      - restore_cache
+      - restore_npm
       - save_npm
       - run: npm install
       - run: npm run lint
