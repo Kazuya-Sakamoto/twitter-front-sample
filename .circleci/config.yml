@@ -25,9 +25,9 @@ jobs:
       name: default
     steps:
       - checkout
-      - restore_cache
-      - run: npm install
+      - restore_npm
       - save_npm
+      - run: npm install
       - run: npm run build
   lint:
     executor:
@@ -35,8 +35,8 @@ jobs:
     steps:
       - checkout
       - restore_cache
-      - run: npm install
       - save_npm
+      - run: npm install
       - run: npm run lint
 
 workflows:
