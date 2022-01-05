@@ -20,16 +20,14 @@ commands:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
 jobs:
-  build:
-    docker:
-      - image: circleci/node:16.8.0
-    working_directory: ~/repo
+  test:
+    executor:
+      name: default
     steps:
       - checkout
       - restore_cache
       - run: npm install
       - save_npm
-      - run: npm run lint
       - run: npm run test
   lint:
     executor:
