@@ -18,7 +18,7 @@ type Params = {
   password: string
 }
 type Response = {
-  jwt_token: string
+  jwtToken: string
   url: string
 }
 
