@@ -7,11 +7,11 @@ executors:
           TZ: Asia/Tokyo
           working_directory: ~/repo
 commands:
-  install_npm_dependencies:
-    steps:
-      - tun:
-          name: Install_npm_dependencies
-          commands: npm install
+  # install_npm_dependencies:
+  #   steps:
+  #     - run:
+  #         name: Install_npm_dependencies
+  #         commands: npm install
   restore_npm:
     steps:
       - restore_cache:
@@ -43,7 +43,8 @@ jobs:
       - checkout
       - restore_npm
       - save_npm
-      - install_npm_dependencies
+      # - install_npm_dependencies
+      - run: npm install
       - restore_node
       - save_node
   build:
@@ -53,7 +54,8 @@ jobs:
       - checkout
       - restore_npm
       - save_npm
-      - install_npm_dependencies
+      # - install_npm_dependencies
+      - run: npm install
       - run: npm run build
   lint:
     executor:
@@ -62,7 +64,8 @@ jobs:
       - checkout
       - restore_npm
       - save_npm
-      - install_npm_dependencies
+      # - install_npm_dependencies
+      - run: npm install
       - run: npm run lint
   test:
     executor:
@@ -71,7 +74,8 @@ jobs:
       - checkout
       - restore_npm
       - save_npm
-      - install_npm_dependencies
+      # - install_npm_dependencies
+      - run: npm install
       - run: npm run test
 
 workflows:
