@@ -5,55 +5,81 @@ import {
   toRefs,
   useRouter,
 } from '@nuxtjs/composition-api'
-import axios from 'axios'
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 
-type State = {
-  inputs: {
-    name: string
+type T = {
+  State: {
+    inputs: {
+      name: string
+      password: string
+    }
+    isError: boolean
+  }
+  Params: {
+    uid: string
     password: string
   }
-}
-type Params = {
-  uid: string
-  password: string
-}
-type Response = {
-  jwtToken: string
-  url: string
+  RegisterRes: {
+    jwtToken: string
+    url: string
+  }
 }
 
-const initialState = (): State => ({
+const initialState = (): T['State'] => ({
   inputs: {
     name: '',
     password: '',
   },
+  isError: false,
 })
 
 const URL = 'http://localhost:8555'
 
 export default defineComponent({
   setup() {
-    const state = reactive<State>(initialState())
+    const state = reactive<T['State']>(initialState())
     const router = useRouter()
 
     const onRegister = async () => {
-      const params: Params = {
-        uid: state.inputs.name,
-        password: state.inputs.password,
+      const config: AxiosRequestConfig = {
+        url: `${URL}/signup`,
+        method: 'POST',
+        params: {
+          uid: state.inputs.name,
+          password: state.inputs.password,
+        } as T['Params'],
       }
+
       try {
-        const res = await axios.post<Response>(`${URL}/signup`, params)
-        console.log(res, 'res')
-        window.open(res.data.url, '_blank')
-        return router.push('/auth')
-      } catch (error) {
-        return error
+        const res: AxiosResponse<T['RegisterRes']> = await axios.request(config)
+        const { data, status } = res
+        if (status === 200) {
+          window.open(data.url, '_blank')
+          return router.push('/auth')
+        }
+        state.isError = true
+      } catch (e) {
+        if (axios.isAxiosError(e)) {
+          return e.message
+        }
       }
+    }
+
+    const onAuthenticate = async () => {
+      const config: AxiosRequestConfig = {
+        url: `${URL}/signup`,
+        method: 'GET',
+        withCredentials: true,
+      }
+      const res: AxiosResponse<any> = await axios.request(config)
+      const { data } = res
+      window.location.href = data.url
     }
 
     return {
       ...toRefs(state),
       onRegister,
+      onAuthenticate,
     }
   },
 })
@@ -110,7 +136,26 @@ export default defineComponent({
             </button>
           </div>
         </div>
+
+        <div class="md:flex md:items-center pt-8">
+          <div class="md:w-1/3"></div>
+          <div class="md:w-2/3">
+            <button
+              class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              type="button"
+              @click="onAuthenticate"
+            >
+              Twitter 認証
+            </button>
+          </div>
+        </div>
       </form>
+      <template v-if="isError">
+        <div>
+          <p>登録が失敗</p>
+        </div>
+      </template>
+      <p></p>
     </div>
   </div>
 </template>
