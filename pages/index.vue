@@ -68,8 +68,11 @@ export default defineComponent({
     const onAuthenticate = async () => {
       const config: AxiosRequestConfig = {
         url: `${URL}/signup`,
-        method: 'GET',
+        method: 'POST',
         withCredentials: true,
+        params: {
+          callbackURL: `http://localhost:3999/app/twitter/callback`,
+        },
       }
       const res: AxiosResponse<any> = await axios.request(config)
       const { data } = res

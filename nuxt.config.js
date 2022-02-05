@@ -46,6 +46,6 @@ export default {
 
   //* port number change
   server: {
-    port: 3339,
+    port: 3999,
   },
 }
